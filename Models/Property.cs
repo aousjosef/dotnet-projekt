@@ -14,7 +14,7 @@ public class Property
 
     public string? Description { get; set; }
 
-    [Required]
+
     [Range(1, int.MaxValue, ErrorMessage = "The price must be bigger than 0.")]
     public int? Price { get; set; }
 
@@ -36,6 +36,7 @@ public class Property
 
     public PropertyType? PropertyType { get; set; } = null!;
 
+    public ICollection<Image> Images { get; set; } = new List<Image>();
 
 
 
