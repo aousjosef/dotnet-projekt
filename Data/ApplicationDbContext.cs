@@ -15,6 +15,6 @@ public class ApplicationDbContext : IdentityDbContext
 
     public DbSet<Property> Properties { get; set; }
 
-    public DbSet<PropertyType> PropertyTypes { get; set; }
+    public DbSet<PropertyCat> PropertyCats { get; set; }
 }
 

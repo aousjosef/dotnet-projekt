@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastigheterse.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240227031520_InitialCreate")]
+    [Migration("20240227042117_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -60,7 +60,7 @@ namespace Fastigheterse.Migrations
                     b.Property<int?>("Price")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PropertyTypeId")
+                    b.Property<int>("PropertyCatId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("Rooms")
@@ -78,12 +78,12 @@ namespace Fastigheterse.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PropertyTypeId");
+                    b.HasIndex("PropertyCatId");
 
                     b.ToTable("Properties");
                 });
 
-            modelBuilder.Entity("Fastigheterse.Models.PropertyType", b =>
+            modelBuilder.Entity("Fastigheterse.Models.PropertyCat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +95,7 @@ namespace Fastigheterse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyTypes");
+                    b.ToTable("PropertyCats");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -307,13 +307,13 @@ namespace Fastigheterse.Migrations
 
             modelBuilder.Entity("Fastigheterse.Models.Property", b =>
                 {
-                    b.HasOne("Fastigheterse.Models.PropertyType", "PropertyType")
+                    b.HasOne("Fastigheterse.Models.PropertyCat", "PropertyCat")
                         .WithMany("Properties")
-                        .HasForeignKey("PropertyTypeId")
+                        .HasForeignKey("PropertyCatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PropertyType");
+                    b.Navigation("PropertyCat");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -372,7 +372,7 @@ namespace Fastigheterse.Migrations
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("Fastigheterse.Models.PropertyType", b =>
+            modelBuilder.Entity("Fastigheterse.Models.PropertyCat", b =>
                 {
                     b.Navigation("Properties");
                 });

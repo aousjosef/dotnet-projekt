@@ -2,7 +2,7 @@
 
 namespace Fastigheterse.Models;
 
-public class PropertyType
+public class PropertyCat
 {
 
     public int Id { get; set; }

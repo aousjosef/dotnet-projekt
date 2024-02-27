@@ -51,7 +51,7 @@ namespace Fastigheterse.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PropertyTypes",
+                name: "PropertyCats",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -60,7 +60,7 @@ namespace Fastigheterse.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PropertyTypes", x => x.Id);
+                    table.PrimaryKey("PK_PropertyCats", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,15 +184,15 @@ namespace Fastigheterse.Migrations
                     Zipcode = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: true),
-                    PropertyTypeId = table.Column<int>(type: "INTEGER", nullable: false)
+                    PropertyCatId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Properties", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Properties_PropertyTypes_PropertyTypeId",
-                        column: x => x.PropertyTypeId,
-                        principalTable: "PropertyTypes",
+                        name: "FK_Properties_PropertyCats_PropertyCatId",
+                        column: x => x.PropertyCatId,
+                        principalTable: "PropertyCats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -260,9 +260,9 @@ namespace Fastigheterse.Migrations
                 column: "PropertyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Properties_PropertyTypeId",
+                name: "IX_Properties_PropertyCatId",
                 table: "Properties",
-                column: "PropertyTypeId");
+                column: "PropertyCatId");
         }
 
         /// <inheritdoc />
@@ -296,7 +296,7 @@ namespace Fastigheterse.Migrations
                 name: "Properties");
 
             migrationBuilder.DropTable(
-                name: "PropertyTypes");
+                name: "PropertyCats");
         }
     }
 }
