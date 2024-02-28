@@ -31,14 +31,11 @@ public class Property
 
     public string? CreatedBy { get; set; }
 
-
     public int PropertyCatId { get; set; }
 
     public PropertyCat? PropertyCat { get; set; }
 
     public ICollection<Image> Images { get; set; } = new List<Image>();
-
-
 
 }
 

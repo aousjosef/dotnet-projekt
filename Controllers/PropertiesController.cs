@@ -53,13 +53,27 @@ namespace Fastigheterse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Size,Description,Price,Rooms,City,Zipcode,CreatedDate,CreatedBy,PropertyCatId")] Property @property)
+        public async Task<IActionResult> Create([Bind("Id,Title,Size,Description,Price,Rooms,City,Zipcode,CreatedDate,CreatedBy,PropertyCatId")] Property @property, List<IFormFile> imageFiles)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(@property);
                 await _context.SaveChangesAsync();
+
+                if (imageFiles != null && imageFiles.Count > 0)
+                {
+                    foreach (var file in imageFiles)
+                    {
+                        var filePath = await SaveFileAsync(file); // Save each file and get back the file path
+                        var image = new Image { Url = filePath, PropertyId = @property.Id }; // Create image with URL as filePath
+                        _context.Images.Add(image);
+                    }
+
+                    await _context.SaveChangesAsync(); // Save image paths in the database
+                }
+
                 return RedirectToAction(nameof(Index));
+
             }
             ViewData["PropertyCatId"] = new SelectList(_context.PropertyCats, "Id", "Name", @property.PropertyCatId);
             return View(@property);
@@ -156,5 +170,38 @@ namespace Fastigheterse.Controllers
         {
             return _context.Properties.Any(e => e.Id == id);
         }
+
+
+        private async Task<string> SaveFileAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return null;
+            }
+
+            // Define the directory path to save images
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+            // Ensure the directory exists
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            // Create a unique file name to prevent overwriting existing files
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            // Save the file
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            // Return the relative path as stored in the database
+            return Path.Combine("/images", fileName); // Returns a relative path to be stored in the database
+        }
+
+
     }
 }
