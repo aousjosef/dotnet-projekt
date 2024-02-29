@@ -487,3 +487,8 @@ $RECYCLE.BIN/
 #DB files
 MainDatabase.db-wal
 MainDatabase.db-shm
+
+#images
+wwwroot/media/images*
+
+!wwwroot/media/images/.gitkeep
