@@ -1,0 +1,52 @@
+﻿@{
+    var imageList = ViewBag.ImageList;
+}
+
+<h1>Images</h1>
+
+<p>
+    <a asp-controller="Images" asp-action="Create">Add more Images</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Image
+            </th>
+            <th>
+                URL
+            </th>
+            <th>
+               Property
+            </th>
+
+
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var img in imageList)
+        {
+            <tr>
+                <td>
+                    <img src="@img.Url" alt="Alternate Text" style="width: 70px; height: 70px" />
+                </td>
+                <td>
+                   @img.Url
+                </td>
+                <td>
+                    @img.Property.Title)
+                </td>
+                <td>
+                    <a asp-controller="Images" asp-action="Edit" asp-route-id="@img.Id">Edit</a> |
+                    <a asp-controller ="Images" asp-action="Details" asp-route-id="@img.Id">Details</a> |
+                    <a asp-controller="Images" asp-action="Delete" asp-route-id="@img.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

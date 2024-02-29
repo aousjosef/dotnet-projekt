@@ -93,6 +93,10 @@ namespace Fastigheterse.Controllers
                 return NotFound();
             }
             ViewData["PropertyCatId"] = new SelectList(_context.PropertyCats, "Id", "Name", @property.PropertyCatId);
+
+            // send image list to view
+            var applicationDbContextImages = _context.Images.Include(i => i.Property);
+            ViewBag.imageList = applicationDbContextImages;
             return View(@property);
         }
 
@@ -199,7 +203,7 @@ namespace Fastigheterse.Controllers
             }
 
             // Return the relative path as stored in the database
-            return (filePath); // Returns a relative path to be stored in the database
+            return Path.Combine("media/images", fileName); // Returns a relative path to be stored in the database
         }
 
 
