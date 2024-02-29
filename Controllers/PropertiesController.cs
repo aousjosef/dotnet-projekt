@@ -180,7 +180,7 @@ namespace Fastigheterse.Controllers
             }
 
             // Define the directory path to save images
-            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/media/images");
 
             // Ensure the directory exists
             if (!Directory.Exists(uploadPath))
@@ -199,7 +199,7 @@ namespace Fastigheterse.Controllers
             }
 
             // Return the relative path as stored in the database
-            return Path.Combine("/images", fileName); // Returns a relative path to be stored in the database
+            return (filePath); // Returns a relative path to be stored in the database
         }
 
 
