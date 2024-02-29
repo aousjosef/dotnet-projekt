@@ -82,12 +82,14 @@ namespace Fastigheterse.Controllers
         // GET: Properties/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var @property = await _context.Properties.FindAsync(id);
+
             if (@property == null)
             {
                 return NotFound();
@@ -95,7 +97,13 @@ namespace Fastigheterse.Controllers
             ViewData["PropertyCatId"] = new SelectList(_context.PropertyCats, "Id", "Name", @property.PropertyCatId);
 
             // send image list to view
-            var applicationDbContextImages = _context.Images.Include(i => i.Property);
+
+
+
+            var applicationDbContextImages = _context.Images
+                                           .Where(i => i.PropertyId == id)
+                                           .Include(i => i.Property);
+
             ViewBag.imageList = applicationDbContextImages;
             return View(@property);
         }

@@ -53,17 +53,31 @@ namespace Fastigheterse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Url,PropertyId")] Image image)
+        public async Task<IActionResult> Create([Bind("Url,PropertyId")] Image imageModel, List<IFormFile> imageFiles)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(image);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (imageFiles != null && imageFiles.Count > 0)
+                {
+                    foreach (var file in imageFiles)
+                    {
+                        var filePath = await SaveFileAsync(file); // Save each file and get back the file path
+                        var image = new Image
+                        {
+                            Url = filePath,
+                            PropertyId = imageModel.PropertyId // Assuming PropertyId is what links the image to a property
+
+                        };
+                        _context.Add(image);
+                    }
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["PropertyId"] = new SelectList(_context.Properties, "Id", "Title", image.PropertyId);
-            return View(image);
+            ViewData["PropertyId"] = new SelectList(_context.Properties, "Id", "Title", imageModel.PropertyId);
+            return View(imageModel); // Consider returning to a view that allows correcting the submission
         }
+
 
         // GET: Images/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -155,6 +169,37 @@ namespace Fastigheterse.Controllers
         private bool ImageExists(int id)
         {
             return _context.Images.Any(e => e.Id == id);
+        }
+
+
+        private async Task<string> SaveFileAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return null;
+            }
+
+            // Define the directory path to save images
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/media/images");
+
+            // Ensure the directory exists
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            // Create a unique file name to prevent overwriting existing files
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            // Save the file
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            // Return the relative path as stored in the database
+            return Path.Combine("media/images", fileName); // Returns a relative path to be stored in the database
         }
     }
 }
