@@ -33,13 +33,14 @@
         {
             <tr>
                 <td>
-                    <img src="@img.Url" alt="Alternate Text" style="width: 70px; height: 70px" />
+                    <img src="@Url.Content($"~/{img.Url}")" alt="Alternate Text" style="width: 70px; height: 70px" />
+
                 </td>
                 <td>
                    @img.Url
                 </td>
                 <td>
-                    @img.Property.Title)
+                    @img.Property.Title
                 </td>
                 <td>
                     <a asp-controller="Images" asp-action="Edit" asp-route-id="@img.Id">Edit</a> |
