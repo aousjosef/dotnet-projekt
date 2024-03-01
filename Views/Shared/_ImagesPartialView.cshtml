@@ -5,7 +5,7 @@
 <h1>Images</h1>
 
 <p>
-    <a asp-controller="Images" asp-action="Create">Add more Images</a>
+    <a asp-controller="Images" asp-action="Create" asp-route-propertyId="@imageList[0].PropertyId">Add more Images</a>
 </p>
 
 <table class="table">
@@ -24,7 +24,10 @@
 
 
             <th>
-
+                Details
+            </th>
+            <th>
+                Delete
             </th>
         </tr>
     </thead>
@@ -43,9 +46,11 @@
                     @img.Property.Title
                 </td>
                 <td>
-                    <a asp-controller="Images" asp-action="Edit" asp-route-id="@img.Id">Edit</a> |
-                    <a asp-controller ="Images" asp-action="Details" asp-route-id="@img.Id">Details</a> |
-                    <a asp-controller="Images" asp-action="Delete" asp-route-id="@img.Id">Delete</a>
+                    <a asp-controller="Images" asp-action="Details" asp-route-id="@img.Id">Details</a>
+                
+                </td>
+                <td>
+                <a asp-controller="Images" asp-action="Delete" asp-route-id="@img.Id">Delete</a>
                 </td>
             </tr>
         }

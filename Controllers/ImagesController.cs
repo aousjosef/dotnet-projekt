@@ -42,9 +42,20 @@ namespace Fastigheterse.Controllers
         }
 
         // GET: Images/Create
-        public IActionResult Create()
+        //Enabled get with Id so when image gets edited from inside a property, it automatilcy selects it. If Id is sent as a parameter.
+        [HttpGet("Images/Create/{propertyId?}")]
+
+        public IActionResult Create(int? propertyId)
         {
-            ViewData["PropertyId"] = new SelectList(_context.Properties, "Id", "Title");
+            if (propertyId.HasValue)
+            {
+                ViewBag.PropertyId = new SelectList(_context.Properties, "Id", "Title", propertyId);
+            }
+            else
+            {
+                ViewBag.PropertyId = new SelectList(_context.Properties, "Id", "Title");
+            }
+
             return View();
         }
 

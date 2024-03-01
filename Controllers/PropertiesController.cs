@@ -104,7 +104,8 @@ namespace Fastigheterse.Controllers
                                            .Where(i => i.PropertyId == id)
                                            .Include(i => i.Property);
 
-            ViewBag.imageList = applicationDbContextImages;
+            //included tolistasync. and sent it to editpage
+            ViewBag.imageList = await applicationDbContextImages.ToListAsync();
             return View(@property);
         }
 
