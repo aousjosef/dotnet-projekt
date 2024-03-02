@@ -174,7 +174,19 @@ namespace Fastigheterse.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            //creates refersurl which the url the request was sent from, then if it exits, we get sent back there.
+
+            string refererUrl = Request.Headers["Referer"].ToString();
+            if (!string.IsNullOrEmpty(refererUrl))
+            {
+                return Redirect(refererUrl);
+            }
+            else
+            {
+                // Fallback if Referer is not available
+                return RedirectToAction(nameof(Index)); // Adjust as needed
+            }
         }
 
         private bool ImageExists(int id)

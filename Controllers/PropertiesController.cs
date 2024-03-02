@@ -38,6 +38,14 @@ namespace Fastigheterse.Controllers
                 return NotFound();
             }
 
+            //show image on details page, sends data as a viewbag
+            var applicationDbContextImages = _context.Images
+                                          .Where(i => i.PropertyId == id)
+                                          .Include(i => i.Property);
+
+            //included tolistasync. and sent it to editpage
+            ViewBag.imageList = await applicationDbContextImages.ToListAsync();
+
             return View(@property);
         }
 

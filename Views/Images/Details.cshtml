@@ -15,6 +15,10 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Url)
+            <br />
+            //Thumbnail image
+            <img src="~/@Html.DisplayFor(model => model.Url)" class="img-thumbnail img-responsive w-50" />
+
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Property)
