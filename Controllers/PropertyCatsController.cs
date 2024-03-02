@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Fastigheterse.Data;
+﻿using Fastigheterse.Data;
 using Fastigheterse.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fastigheterse.Controllers
 {
+    [Authorize]
     public class PropertyCatsController : Controller
     {
         private readonly ApplicationDbContext _context;

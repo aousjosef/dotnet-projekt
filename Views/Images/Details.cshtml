@@ -16,7 +16,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Url)
             <br />
-            //Thumbnail image
+            @* //Thumbnail image *@
             <img src="~/@Html.DisplayFor(model => model.Url)" class="img-thumbnail img-responsive w-50" />
 
         </dd>
@@ -30,5 +30,6 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a href="javascript:void(0);" onclick="history.back();">Back</a>
+
 </div>

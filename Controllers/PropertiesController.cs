@@ -1,13 +1,17 @@
 ﻿using Fastigheterse.Data;
 using Fastigheterse.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fastigheterse.Controllers
 {
+    [Authorize]
     public class PropertiesController : Controller
     {
+
+
         private readonly ApplicationDbContext _context;
 
         public PropertiesController(ApplicationDbContext context)
@@ -61,10 +65,13 @@ namespace Fastigheterse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Size,Description,Price,Rooms,City,Zipcode,CreatedDate,CreatedBy,PropertyCatId")] Property @property, List<IFormFile> imageFiles)
+        public async Task<IActionResult> Create([Bind("Id,Title,Size,Description,Price,Rooms,City,Zipcode,PropertyCatId")] Property @property, List<IFormFile> imageFiles)
         {
             if (ModelState.IsValid)
             {
+
+                property.CreatedDate = DateTime.Now; // Set the current date and time
+                property.CreatedBy = User.Identity.Name; // Set the current user's username
                 _context.Add(@property);
                 await _context.SaveChangesAsync();
 
@@ -122,7 +129,7 @@ namespace Fastigheterse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Size,Description,Price,Rooms,City,Zipcode,CreatedDate,CreatedBy,PropertyCatId")] Property @property)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Size,Description,Price,Rooms,City,Zipcode,PropertyCatId")] Property @property)
         {
             if (id != @property.Id)
             {
@@ -131,6 +138,9 @@ namespace Fastigheterse.Controllers
 
             if (ModelState.IsValid)
             {
+                property.CreatedDate = DateTime.Now; // Set the current date and time
+                property.CreatedBy = User.Identity.Name; // Set the current user's username
+
                 try
                 {
                     _context.Update(@property);
