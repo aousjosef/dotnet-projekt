@@ -35,7 +35,7 @@
                     <td>
                         <form asp-controller="Images" asp-action="Delete" method="post">
                             <input type="hidden" name="id" value="@img.Id" />
-                            //added confirmation popup
+                            @* added confirmation popup *@
                             <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this image?');" />
                         </form>
                     </td>

@@ -9,10 +9,13 @@ namespace Fastigheterse.Controllers
     public class ImagesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ImagesController(ApplicationDbContext context)
+
+        public ImagesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Images
@@ -82,11 +85,14 @@ namespace Fastigheterse.Controllers
                         _context.Add(image);
                     }
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    //return RedirectToAction(nameof(Index));
                 }
             }
             ViewData["PropertyId"] = new SelectList(_context.Properties, "Id", "Title", imageModel.PropertyId);
-            return View(imageModel); // Consider returning to a view that allows correcting the submission
+
+            //retunerar till edit page med specifik property
+            return RedirectToAction("Edit", "Properties", new { id = imageModel.PropertyId });
+
         }
 
 
@@ -168,11 +174,18 @@ namespace Fastigheterse.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var image = await _context.Images.FindAsync(id);
-            if (image != null)
+            if (image == null)
             {
-                _context.Images.Remove(image);
+                return NotFound();
             }
 
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, image.Url.Replace('/', Path.DirectorySeparatorChar));
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            _context.Images.Remove(image);
             await _context.SaveChangesAsync();
 
             //creates refersurl which the url the request was sent from, then if it exits, we get sent back there.
