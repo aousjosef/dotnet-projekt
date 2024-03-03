@@ -31,6 +31,7 @@ public class Property
 
     public int? Zipcode { get; set; }
 
+    [Display(Name = "Creation date")]
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     [Display(Name = "Created by user")]

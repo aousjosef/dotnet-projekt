@@ -1,8 +1,12 @@
-﻿namespace Fastigheterse.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Fastigheterse.Models;
 
 public class Image
 {
     public int Id { get; set; }
+
+    [Display(Name = "Image file path")]
 
     public string? Url { get; set; }
 

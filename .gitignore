@@ -488,7 +488,9 @@ $RECYCLE.BIN/
 MainDatabase.db-wal
 MainDatabase.db-shm
 
-#images
-wwwroot/media/images*
+# Ignore everything in the images directory
+/wwwroot/media/images/*
 
-!wwwroot/media/images/.gitkeep
+
+# But not the .gitkeep file
+!/wwwroot/media/images/.gitkeep

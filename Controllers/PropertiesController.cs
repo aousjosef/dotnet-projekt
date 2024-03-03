@@ -13,10 +13,13 @@ namespace Fastigheterse.Controllers
 
 
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PropertiesController(ApplicationDbContext context)
+
+        public PropertiesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Properties
@@ -187,15 +190,30 @@ namespace Fastigheterse.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @property = await _context.Properties.FindAsync(id);
-            if (@property != null)
+            var property = await _context.Properties
+                                .Include(p => p.Images) // Make sure to include the images in the query
+                                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (property != null)
             {
-                _context.Properties.Remove(@property);
+                // Delete image files from the file system
+                foreach (var image in property.Images)
+                {
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, image.Url.Replace('/', Path.DirectorySeparatorChar));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
+                // Now remove the property (and cascade delete the images from the database)
+                _context.Properties.Remove(property);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool PropertyExists(int id)
         {
